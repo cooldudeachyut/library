@@ -22,16 +22,59 @@ function addBookToLibrary() {
 	let newbook = new Book(title_node.value, author_node.value, genre_node.value, year_node.value, ind++);
 	myLibrary.push(newbook);
 	buildNewCard(newbook.title, newbook.author, newbook.genre, newbook.year, newbook.id, newbook.read);
-	
+
 	closeForm();
 }
 
-function removeElement() {
-	
+function removeElement(event) {
+	let child = event.currentTarget;
+	let target = (child.parentNode).parentNode;
+	const id = target.firstChild.innerText;
+	target.remove();
+
+	for (let i = 0; i < myLibrary.length; i++)
+	{
+		if (myLibrary[i].id == id)
+		{
+			myLibrary.splice(i, 1);
+		}
+	}
 }
 
-function changeReadStatus() {
+function changeReadStatus(event) {
+	let status = event.currentTarget;
+	let newStatus;
+	let check = [...status.classList];
+	if (check[1] == "red")
+	{
+		status.classList.remove("red");
+		status.classList.add("green");
+		newStatus = "READ";
+	}
 
+	else if (check[1] == "green")
+	{
+		status.classList.remove("green");
+		status.classList.add("red");
+		newStatus = "UNREAD";
+	}
+
+	status.innerText = newStatus;
+
+	let parent = (status.parentNode).parentNode;
+	const id = parent.firstChild.innerText;
+
+	for (let i = 0; i < myLibrary.length; i++)
+	{
+		if (myLibrary[i].id == id)
+		{
+			if (newStatus == "READ")
+				myLibrary[i].read = true;
+			
+			else
+				myLibrary[i].read = false;
+		}
+	}
 }
 
 function buildNewCard(title, author, genre, year, id, read)
@@ -39,6 +82,11 @@ function buildNewCard(title, author, genre, year, id, read)
 	let div = document.createElement("div");
 	div.classList.add("book-grid-card");
 	grid.append(div);
+
+	let hiddenID = document.createElement("div");
+	hiddenID.textContent = id;
+	hiddenID.style.display = "none";
+	div.append(hiddenID);
 
 	for (let j = 0; j < 4; j++)
 	{
@@ -52,8 +100,9 @@ function buildNewCard(title, author, genre, year, id, read)
 			text.textContent = "Genre: " + genre;
 		else
 		{
-			if (year != "")
-				text.textContent = "Year Published: " + year;
+			text.textContent = "Year Published: " + year;
+			if (year == "")
+				text.style.visibility = "hidden";
 		}
 
 		div.append(text);
@@ -136,6 +185,6 @@ document.getElementById("add-book-button").addEventListener("click", openForm);
 inputContainer.addEventListener("mousedown", closeFormCheck);
 
 let today = new Date();
-document.getElementById("year").setAttribute("max", `${today.getFullYear}`);
+document.getElementById("year").setAttribute("max", `${today.getFullYear()}`);
 
 buildLibrary();
