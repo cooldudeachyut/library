@@ -1,3 +1,4 @@
+myStorage = window.localStorage;
 let myLibrary = [];
 let inputContainer = document.getElementById("input-container");
 let form = document.getElementById("input-book-form");
@@ -18,9 +19,25 @@ function Book (title, author, genre, year, id) {
 	this.read = false;
 }
 
+function readFromLocalStorage() {
+	if (myStorage.length != 0)
+	{
+		myLibrary = JSON.parse(myStorage.getItem("myLibrary"));
+		ind = JSON.parse(myStorage.getItem("index"));
+	}
+}
+
+function updateLocalStorage() {
+	myStorage.setItem("myLibrary", JSON.stringify(myLibrary));
+	myStorage.setItem("index", ind);
+}
+
 function addBookToLibrary() {
 	let newbook = new Book(title_node.value, author_node.value, genre_node.value, year_node.value, ind++);
+
 	myLibrary.push(newbook);
+	updateLocalStorage();
+
 	buildNewCard(newbook.title, newbook.author, newbook.genre, newbook.year, newbook.id, newbook.read);
 
 	closeForm();
@@ -39,6 +56,8 @@ function removeElement(event) {
 			myLibrary.splice(i, 1);
 		}
 	}
+
+	updateLocalStorage();
 }
 
 function changeReadStatus(event) {
@@ -75,6 +94,8 @@ function changeReadStatus(event) {
 				myLibrary[i].read = false;
 		}
 	}
+
+	updateLocalStorage();
 }
 
 function buildNewCard(title, author, genre, year, id, read)
@@ -187,4 +208,5 @@ inputContainer.addEventListener("mousedown", closeFormCheck);
 let today = new Date();
 document.getElementById("year").setAttribute("max", `${today.getFullYear()}`);
 
+readFromLocalStorage();
 buildLibrary();
