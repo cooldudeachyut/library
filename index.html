@@ -11,10 +11,31 @@
 		</div>
 		<div id = "grid-container">
 			<div id = "book-grid">
-				<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+		
 			</div>
 		</div>
 		<button type="button" id="add-book-button">Add Book</button>
+		<div id = "input-container">
+			<form id = "input-book-form" action="#" onsubmit="addBookToLibrary(); return false;">
+				<div class = "info">
+					<label for="title" class="info-label">Enter book name</label>
+					<input type="text" class= "input-box" id="title" name="title" autocomplete="off" required>
+				</div>
+				<div class = "info">
+					<label for="author" class="info-label">Enter author name</label>
+					<input type="text" class= "input-box" id="author" name="author" autocomplete="off" required>
+				</div>
+				<div class = "info">
+					<label for = "genre" class="info-label">Enter book genre</label>
+					<input type="text" class= "input-box" id="genre" name="genre" autocomplete="off" required>
+				</div>
+				<div class = "info">
+					<label for="year" class="info-label">Enter year of publication</label>
+					<input type="number" class= "input-box" id="year" name="year" min="0">
+				</div>
+				<button type="submit" id = "submit" form="input-book-form" >Submit</button>
+			</form>
+		</div>
 	</body>
 	<script src="scripts/main.js"></script>
 </html>
